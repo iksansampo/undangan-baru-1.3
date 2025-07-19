@@ -1,0 +1,103 @@
+/* File: public-site/assets/themes/classic_elegant.css */
+/* Deskripsi: Tema "Classic Elegant" */
+
+/* --- Warna & Font Tema --- */
+body {
+    background-color: #EAEAEA; /* Warna latar abu-abu muda */
+    color: #333;
+}
+
+.section-title h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #bdc3c7;
+}
+
+.bg-light {
+    background-color: #f5f5f5;
+}
+
+/* --- Layar Pembuka (Cover) --- */
+.cover-screen {
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+    color: #fff;
+}
+
+.cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 400;
+}
+
+.cover-subtitle, .cover-guest-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+}
+
+.cover-guest-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+.cover-button {
+    color: #fff;
+    border-color: #fff;
+}
+.cover-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- Tombol Audio --- */
+.audio-control-btn {
+    background-color: #333;
+    color: #fff;
+}
+
+/* --- Bagian Hero --- */
+.hero-content {
+    color: #fff;
+}
+.hero-content p {
+    font-size: 1.5rem;
+}
+.hero-content h1 {
+    font-size: 5rem;
+}
+
+/* --- Bagian Mempelai & Acara --- */
+.couple-person h3 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+.event-card {
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.event-card h3 {
+    color: #2c3e50;
+}
+
+/* --- Amplop & RSVP --- */
+.gift-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.btn-primary {
+    background-color: #2c3e50;
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: #34495e;
+}
+.rsvp-item {
+    background-color: #fff;
+    border-left: 4px solid #bdc3c7;
+}
+.rsvp-item .status.hadir {
+    background-color: #27ae60;
+    color: white;
+}
+.rsvp-item .status.tidak-hadir {
+    background-color: #c0392b;
+    color: white;
+}

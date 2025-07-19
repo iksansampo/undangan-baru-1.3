@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <!-- CSS Utama & Tema -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href=""> <!-- Akan diisi oleh JS -->
+</head>
+<body>
+
+    <!-- Tombol Audio -->
+    <button id="audio-control" class="audio-control-btn" style="display: none;"><i class="fas fa-volume-mute"></i></button>
+    <audio id="background-music" loop></audio>
+
+    <!-- Layar Pembuka (Cover) -->
+    <div id="cover" class="cover-screen">
+        <div class="cover-content">
+            <p class="cover-subtitle">The Wedding of</p>
+            <h1 id="cover-couple-names" class="cover-title"></h1>
+            <p class="cover-guest-label">Kepada Yth: Bapak/Ibu/Saudara/i</p>
+            <p id="guest-name" class="cover-guest-name">Tamu Undangan</p>
+            <button id="open-invitation-btn" class="cover-button">
+                <i class="fas fa-envelope-open"></i> Buka Undangan
+            </button>
+        </div>
+    </div>
+
+    <!-- Konten Utama Undangan (Awalnya tersembunyi) -->
+    <main id="main-content" style="display: none;">
+
+        <!-- Bagian Sampul Utama -->
+        <section id="hero" class="hero-section">
+             <div class="hero-content">
+                <p>The Wedding of</p>
+                <h1 id="hero-couple-names"></h1>
+                <p id="hero-date"></p>
+            </div>
+        </section>
+
+        <!-- Bagian Mempelai -->
+        <section id="couple" class="section-padding">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Mempelai</h2>
+                </div>
+                <div id="couple-details" class="couple-container">
+                    <!-- Data mempelai akan diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian Acara -->
+        <section id="event" class="section-padding bg-light">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Detail Acara</h2>
+                </div>
+                <div id="event-details" class="event-container">
+                    <!-- Data acara akan diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Bagian Cerita -->
+        <section id="story" class="section-padding">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Cerita Cinta</h2>
+                </div>
+                <p id="story-content" class="story-text"></p>
+            </div>
+        </section>
+
+        <!-- Bagian Galeri -->
+        <section id="gallery" class="section-padding bg-light">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Galeri Foto</h2>
+                </div>
+                <div id="gallery-grid" class="gallery-container">
+                    <!-- Foto galeri akan diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian Amplop Digital -->
+        <section id="gift" class="section-padding">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Amplop Digital</h2>
+                </div>
+                <div id="gift-details" class="gift-container">
+                    <!-- Info amplop akan diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian RSVP -->
+        <section id="rsvp" class="section-padding bg-light">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Ucapan & Do'a</h2>
+                </div>
+                <div class="rsvp-container">
+                    <form id="rsvp-form" class="rsvp-form">
+                        <div class="form-group">
+                            <input type="text" id="rsvp-name" placeholder="Nama Anda" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="rsvp-status" required>
+                                <option value="" disabled selected>Konfirmasi Kehadiran</option>
+                                <option value="Hadir">Hadir</option>
+                                <option value="Tidak Hadir">Tidak Hadir</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="rsvp-message" rows="4" placeholder="Tulis ucapan dan do'a Anda..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Kirim</button>
+                    </form>
+                    <div id="rsvp-list" class="rsvp-list">
+                        <h3>Ucapan & Doa</h3>
+                        <!-- Daftar ucapan akan diisi oleh JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- JavaScript Utama -->
+    <script src="assets/js/script.js"></script>
+
+</body>
+</html>
