@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = 'http://localhost/undangan_digital_platform/backend/api';
     const UPLOAD_BASE_URL = 'http://localhost/undangan_digital_platform/backend/uploads';
 
+    // Variabel global untuk interval agar bisa dihentikan
+    let countdownInterval;
+
     const coverScreen = document.getElementById('cover');
     const mainContent = document.getElementById('main-content');
     const openButton = document.getElementById('open-invitation-btn');
@@ -30,8 +33,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Fungsi baru untuk logika countdown
+    const startCountdown = (targetDate) => {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        const countdownTimerEl = document.getElementById('countdown-timer');
+        const countdownFinishedEl = document.getElementById('countdown-finished');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        const updateTimer = () => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                if(countdownTimerEl) countdownTimerEl.style.display = 'none';
+                if(countdownFinishedEl) countdownFinishedEl.style.display = 'block';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if(daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if(hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if(minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if(secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+        };
+
+        updateTimer();
+        countdownInterval = setInterval(updateTimer, 1000);
+    };
+
     const populatePage = (data) => {
-        if (!data || !data.mempelai) return; // Pengaman jika data tidak lengkap
+        if (!data || !data.mempelai) return;
         const { undangan, mempelai, acara, cerita, media, amplop, rsvp } = data;
 
         document.title = `Undangan Pernikahan ${mempelai.panggilan_pria} & ${mempelai.panggilan_wanita}`;
@@ -91,10 +133,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const rsvpList = document.getElementById('rsvp-list');
         if (rsvp && Array.isArray(rsvp) && rsvpList) {
             if (rsvp.length > 0) {
-                rsvpList.innerHTML = '<h3>Ucapan & Doa</h3>' + rsvp.map(item => `...`).join(''); // Konten RSVP
+                rsvpList.innerHTML = '<h3>Ucapan & Doa</h3>' + rsvp.map(item => `
+                    <div class="rsvp-item">
+                        <p class="name">${item.nama_tamu} <span class="status ${item.kehadiran?.toLowerCase() === 'hadir' ? 'hadir' : 'tidak-hadir'}">${item.kehadiran}</span></p>
+                        <p class="message">"${item.ucapan}"</p>
+                        <p class="time" style="font-size: 0.8em; color: #888;">${new Date(item.waktu).toLocaleString('id-ID')}</p>
+                    </div>`).join('');
             } else {
                 rsvpList.innerHTML = '<h3>Ucapan & Doa</h3><p>Jadilah yang pertama memberikan ucapan.</p>';
             }
+        }
+        
+        if (acara && acara.length > 0) {
+            const mainEvent = acara[0];
+            const targetDateTimeString = `${mainEvent.tanggal}T${mainEvent.waktu}`;
+            const targetDate = new Date(targetDateTimeString).getTime();
+            if (!isNaN(targetDate)) {
+                startCountdown(targetDate);
+            } else {
+                console.error("Format tanggal atau waktu acara tidak valid:", targetDateTimeString);
+                const countdownSection = document.getElementById('countdown-section');
+                if(countdownSection) countdownSection.style.display = 'none';
+            }
+        } else {
+            const countdownSection = document.getElementById('countdown-section');
+            if(countdownSection) countdownSection.style.display = 'none';
         }
     };
 
@@ -128,32 +191,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         });
-        document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const params = getUrlParams();
-            const payload = {
-                undangan_id: params.id,
-                nama_tamu: document.getElementById('rsvp-name').value,
-                kehadiran: document.getElementById('rsvp-status').value,
-                ucapan: document.getElementById('rsvp-message').value
-            };
-            try {
-                const response = await fetch(`${API_BASE_URL}/rsvp/create.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-                alert(result.message);
-                if (response.ok) {
-                    e.target.reset();
-                    const newData = await fetchInvitationData(params.id);
-                    populatePage(newData);
+        const rsvpForm = document.getElementById('rsvp-form');
+        if(rsvpForm) {
+            rsvpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const params = getUrlParams();
+                const payload = {
+                    undangan_id: params.id,
+                    nama_tamu: document.getElementById('rsvp-name').value,
+                    kehadiran: document.getElementById('rsvp-status').value,
+                    ucapan: document.getElementById('rsvp-message').value
+                };
+                try {
+                    const response = await fetch(`${API_BASE_URL}/rsvp/create.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    alert(result.message);
+                    if (response.ok) {
+                        e.target.reset();
+                        const newData = await fetchInvitationData(params.id);
+                        populatePage(newData);
+                    }
+                } catch (error) {
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
                 }
-            } catch (error) {
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-            }
-        });
+            });
+        }
     };
 
     const init = async () => {
